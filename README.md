@@ -16,7 +16,7 @@ def data_init(df):
     print('Checking for nulls:')
     msno.bar(df)
 ```
-```python3
+```
 Displaying columns:
 Index(['gameId', 'blueWins', 'blueWardsPlaced', 'blueWardsDestroyed',
        'blueFirstBlood', 'blueKills', 'blueDeaths', 'blueAssists',
