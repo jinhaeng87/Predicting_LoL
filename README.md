@@ -104,3 +104,5 @@ Processing colum 25 to 29
 Processing colum 30 to 34
 Processing column 35 to 39
 ```
+
+![Checking Nulls](/Users/johnlee/Desktop/documents/Personal_Projects/lolranked/Pics/msno.png)
