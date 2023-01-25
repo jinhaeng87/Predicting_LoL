@@ -145,4 +145,20 @@ Note for the eligibility sake, I have broken features down into size of 5.
 |*Bivariate Analysis of five features. Note two colors represent response variable.*|
 
 
+In addition, Pearson Correlation heatmap was also plotted to view the phenomenon from different perspective.
+See below for a correlation heatmap of all the features against the response variable. 
 
+| <img src="/Pics/heatmap_0.png" alt="Alt text" title=""> |
+|:--:|
+|*Heatmap of features against the response variable*|
+
+And correlation heatmaps for the features themselve. Due to the large number of features, I have broken down the heatmap into 2 parts; <br>
+Red team related features and blue team related features, to improve the visibility and eligibility. 
+
+| <img src="/Pics/heatmap_r.png" alt="Alt text" title=""> |
+|:--:|
+|*Heatmap for Red Team related features.*|
+
+| <img src="/Pics/heatmap_b.png" alt="Alt text" title=""> |
+|:--:|
+|*Heatmap for Blue Team related features.*|
