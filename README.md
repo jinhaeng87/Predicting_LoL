@@ -115,6 +115,7 @@ Note for the eligibility sake, I have broken features down into size of 5.
 | <img src="/Pics/bva1.png" alt="Alt text" title=""> |
 |:--:|
 |*Bivariate Analysis of five features. Note two colors represent response variable.*|
+
 | <img src="/Pics/bva2.png" alt="Alt text" title=""> |
 |:--:|
 |*Bivariate Analysis of five features. Note two colors represent response variable.*|
