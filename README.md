@@ -108,3 +108,13 @@ Processing column 35 to 39
 | <img src="/Pics/msno.png" alt="Alt text" title="Null Stats for the Dataset"> |
 |:--:|
 |*Checking for Nulls in the Dataset (Notice all features are without any nulls)*|
+
+To observe how features are correlated to one another and to the response variable, bivariate analysis was conducted. <br>
+Note for the eligibility sake, I have broken features down into size of 5.
+
+| <img src="/Pics/bva1.png" alt="Alt text" title=""> |
+|:--:|
+|*Bivariate Analysis of five features. Note two colors represent response variable.*|
+| <img src="/Pics/bva2.png" alt="Alt text" title=""> |
+|:--:|
+|*Bivariate Analysis of five features. Note two colors represent response variable.*|
