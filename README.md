@@ -119,3 +119,30 @@ Note for the eligibility sake, I have broken features down into size of 5.
 | <img src="/Pics/bva2.png" alt="Alt text" title=""> |
 |:--:|
 |*Bivariate Analysis of five features. Note two colors represent response variable.*|
+
+| <img src="/Pics/bva3.png" alt="Alt text" title=""> |
+|:--:|
+|*Bivariate Analysis of five features. Note two colors represent response variable.*|
+
+| <img src="/Pics/bva4.png" alt="Alt text" title=""> |
+|:--:|
+|*Bivariate Analysis of five features. Note two colors represent response variable.*|
+
+| <img src="/Pics/bva5.png" alt="Alt text" title=""> |
+|:--:|
+|*Bivariate Analysis of five features. Note two colors represent response variable.*|
+
+| <img src="/Pics/bva6.png" alt="Alt text" title=""> |
+|:--:|
+|*Bivariate Analysis of five features. Note two colors represent response variable.*|
+
+| <img src="/Pics/bva7.png" alt="Alt text" title=""> |
+|:--:|
+|*Bivariate Analysis of five features. Note two colors represent response variable.*|
+
+| <img src="/Pics/bva8.png" alt="Alt text" title=""> |
+|:--:|
+|*Bivariate Analysis of five features. Note two colors represent response variable.*|
+
+
+
