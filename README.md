@@ -104,5 +104,7 @@ Processing colum 25 to 29
 Processing colum 30 to 34
 Processing column 35 to 39
 ```
-
-<img src="/Pics/msno.png" alt="Alt text" title="Null Stats for the Dataset">
+<p>
+    <img src="/Pics/msno.png" alt="Alt text" title="Null Stats for the Dataset">
+    <em>Checking for Nulls in the Dataset (Notice all features are without any nulls</em>
+</p>
