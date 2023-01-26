@@ -162,3 +162,26 @@ Red team related features and blue team related features, to improve the visibil
 | <img src="/Pics/heatmap_b.png" alt="Alt text" title=""> |
 |:--:|
 |*Heatmap for Blue Team related features.*|
+
+It is clear that some of the features are strongly correlated, causing potential multi-collinearity. <br>
+Such can be detrimental when building a classification model and need to be dealt with. <br>
+Based on the heatmap, I have setup a threshold of 0.8, hence if any two features are correlated higher than the threshold, <br>
+one of them will be dropped randomly. 
+
+We would also eliminate features that are weakly correlated to the response variable with proper thresholding, <br>
+but when I go into feature engineering this will be taken care of and potentially be redundant so I will skip here.
+
+
+## 2. Feature Engineering
+We have already ruled out some of the highly correlated features in previous section, but the dataset still contains of too many features (potential cause of overfitting the model) and features that are less important. Normally we would have to worry about encoding categorical values, but such is not the case for this dataset. <br>
+
+Among various regularization techniques, I have chosen to go with Elastic Net regression for choosing important features, because all the features seem to be relatable, as none of them seems unrelated. Therefore, Elastic Net would be a perfect choice to shrink some features while ruling out the others.
+
+### Grid Search for the best parameter
+There are multiple parameters that can be tuned to achieve optimal performance, two of the most prominent parameters are alpha and l1_ratio. <br>
+With RMSE as scoring method, various alpha and l1_ratio values were implemented via cross validation. <br>
+Below is the validation plot for how different combination of alpha-l1_ratio performed.
+
+| <img src="/Pics/enet_val.png" alt="Alt text" title=""> |
+|:--:|
+|*Validation score of Elastic Net Regression*|
