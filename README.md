@@ -168,6 +168,16 @@ Such can be detrimental when building a classification model and need to be deal
 Based on the heatmap, I have setup a threshold of 0.8, hence if any two features are correlated higher than the threshold, <br>
 one of them will be dropped randomly. 
 
+```python3
+# Function to drop highly correlated variables. Threshold is set to 0.8 by default, but an user can change this.
+
+def drop_high_corr_col(df, threshold = 0.8):
+    lower_tri = corr_mat(df)
+    to_drop = [c for c in lower_tri.columns if any(lower_tri[c] > 0.8)]
+    out = df.drop(to_drop, axis = 1)
+    return out
+```
+
 We would also eliminate features that are weakly correlated to the response variable with proper thresholding, <br>
 but when I go into feature engineering this will be taken care of and potentially be redundant so I will skip here.
 
@@ -178,10 +188,66 @@ We have already ruled out some of the highly correlated features in previous sec
 Among various regularization techniques, I have chosen to go with Elastic Net regression for choosing important features, because all the features seem to be relatable, as none of them seems unrelated. Therefore, Elastic Net would be a perfect choice to shrink some features while ruling out the others.
 
 ### Grid Search for the best parameter
-There are multiple parameters that can be tuned to achieve optimal performance, two of the most prominent parameters are alpha and l1_ratio. <br>
+There are multiple parameters that can be tuned to achieve optimal performance, two of the most prominent parameters are alpha and l1_ratio.
 With RMSE as scoring method, various alpha and l1_ratio values were implemented via cross validation. <br>
 Below is the validation plot for how different combination of alpha-l1_ratio performed.
 
 | <img src="/Pics/enet_val.png" alt="Alt text" title=""> |
 |:--:|
 |*Validation score of Elastic Net Regression*|
+
+```python3
+# RMSE score evaluation Function
+def rmse_cv(model, X, y):
+    rmse = np.sqrt(-cross_val_score(model, X, y, scoring="neg_mean_squared_error", cv = 5))
+    return(rmse)
+    
+# Feature Selection with Elastic Net
+
+def fs_enet(df, plot = True):
+    X, y = data_prep(df)
+    # Choose matrix of alphas and l1-ratios for grid search
+    alphas = [0.0005, 0.001, 0.01, 0.03, 0.05, 0.1]
+    l1_ratios = [1, 0.9, 0.8, 0.7, 0.5, 0.1]
+    
+    # Elastic Net Grid search to find best performing parameters
+    cv_elastic = [rmse_cv(ElasticNet(alpha = alpha, l1_ratio = l1_ratio), X, y).mean() 
+                for (alpha, l1_ratio) in product(alphas, l1_ratios)]
+    
+    # Find the alpha-l1_ratio where rmse is the minimum
+    idx = list(product(alphas, l1_ratios))
+    m_idx = cv_elastic.index(min(cv_elastic))
+    alpha, l1_ratio = idx[m_idx]
+    
+    # Fit the model
+    elastic = ElasticNet(alpha = alpha, l1_ratio = l1_ratio)
+    elastic.fit(X, y)
+    
+    # Layout the features based on the importance and visualize.
+    cf = pd.Series(elastic.coef_, index = X.columns)
+    imp_cf = pd.concat([cf.sort_values().head(10), cf.sort_values().tail(10)])
+    print("Elastic Net picked " + str(sum(cf != 0)) + " variables and eliminated the other " +  str(sum(cf == 0)) + " variables")
+    
+    if plot:
+        # Plot out validation curve
+        plt.figure(figsize=(12, 6))
+        p_cv_elastic = pd.Series(cv_elastic, index = idx)
+        p_cv_elastic = p_cv_elastic.dropna()
+        p_cv_elastic.plot(title = "Validation - Elastic Net")
+        plt.xlabel("alpha - l1_ratio")
+        plt.ylabel("rmse")
+
+        # Layout all coeff
+        plt.figure(figsize=(8, 10))
+        cf.sort_values().plot(kind = "barh", color = '#f5bc42')
+        plt.title("All Coefficients in the Elastic Net Model")
+
+        # Layout 20 most important 
+        plt.figure(figsize=(8, 10))
+        imp_cf.plot(kind = "barh")
+        plt.title("20 Important Coefficients in the Elastic Net Model")
+    
+        return list(imp_cf.index)
+    else:
+        return list(imp_cf.index)
+
