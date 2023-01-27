@@ -191,63 +191,70 @@ Among various regularization techniques, I have chosen to go with Elastic Net re
 There are multiple parameters that can be tuned to achieve optimal performance, two of the most prominent parameters are alpha and l1_ratio.
 With RMSE as scoring method, various alpha and l1_ratio values were implemented via cross validation. <br>
 Below is the validation plot for how different combination of alpha-l1_ratio performed.
-
-| <img src="/Pics/enet_val.png" alt="Alt text" title=""> |
-|:--:|
-|*Validation score of Elastic Net Regression*|
-
 ```python3
 # RMSE score evaluation Function
 def rmse_cv(model, X, y):
     rmse = np.sqrt(-cross_val_score(model, X, y, scoring="neg_mean_squared_error", cv = 5))
     return(rmse)
-    
+
+X, y = data_prep(df)
+# Choose matrix of alphas and l1-ratios for grid search
+alphas = [0.0005, 0.001, 0.01, 0.03, 0.05, 0.1]
+l1_ratios = [1, 0.9, 0.8, 0.7, 0.5, 0.1]
+
+# Elastic Net Grid search to find best performing parameters
+cv_elastic = [rmse_cv(ElasticNet(alpha = alpha, l1_ratio = l1_ratio), X, y).mean() 
+            for (alpha, l1_ratio) in product(alphas, l1_ratios)]
+
+# Find the alpha-l1_ratio where rmse is the minimum
+idx = list(product(alphas, l1_ratios))
+m_idx = cv_elastic.index(min(cv_elastic))
+alpha, l1_ratio = idx[m_idx]
+
+# Fit the model
+elastic = ElasticNet(alpha = alpha, l1_ratio = l1_ratio)
+elastic.fit(X, y)
+
+# Plot out validation curve
+plt.figure(figsize=(12, 6))
+p_cv_elastic = pd.Series(cv_elastic, index = idx)
+p_cv_elastic = p_cv_elastic.dropna()
+p_cv_elastic.plot(title = "Validation - Elastic Net")
+plt.xlabel("alpha - l1_ratio")
+plt.ylabel("rmse")
+
+```
+| <img src="/Pics/enet_val.png" alt="Alt text" title=""> |
+|:--:|
+|*Validation score of Elastic Net Regression*|
+
+As can be seen from the code and the plot, it will fetch the optimal combination of alpha-l1_ratio that resulted in the lowest RMSE.
+These chosen values will be used to fit Elastic Net model and proceed into Feature Selection.
+
+### Feature Selection
+Upon fitting Elastic Net model, we can basically rule out any features with coefficient = 0. <br>
+Depending on how many of them are there, we can either decide to further proceed into hard code the number of features desired or leave it at just ruling out 0 coefficient ones. <br>
+In this case, I have deicded to go with 20 best features. Below are the plots for both cases;<br>
+1. Displaying all features with their coefficients
+2. Displaying top 20 features.
+
+
+```python3
 # Feature Selection with Elastic Net
+# Layout the features based on the importance and visualize.
+cf = pd.Series(elastic.coef_, index = X.columns)
+imp_cf = pd.concat([cf.sort_values().head(10), cf.sort_values().tail(10)])
+print("Elastic Net picked " + str(sum(cf != 0)) + " variables and eliminated the other " +  str(sum(cf == 0)) + " variables")
 
-def fs_enet(df, plot = True):
-    X, y = data_prep(df)
-    # Choose matrix of alphas and l1-ratios for grid search
-    alphas = [0.0005, 0.001, 0.01, 0.03, 0.05, 0.1]
-    l1_ratios = [1, 0.9, 0.8, 0.7, 0.5, 0.1]
     
-    # Elastic Net Grid search to find best performing parameters
-    cv_elastic = [rmse_cv(ElasticNet(alpha = alpha, l1_ratio = l1_ratio), X, y).mean() 
-                for (alpha, l1_ratio) in product(alphas, l1_ratios)]
-    
-    # Find the alpha-l1_ratio where rmse is the minimum
-    idx = list(product(alphas, l1_ratios))
-    m_idx = cv_elastic.index(min(cv_elastic))
-    alpha, l1_ratio = idx[m_idx]
-    
-    # Fit the model
-    elastic = ElasticNet(alpha = alpha, l1_ratio = l1_ratio)
-    elastic.fit(X, y)
-    
-    # Layout the features based on the importance and visualize.
-    cf = pd.Series(elastic.coef_, index = X.columns)
-    imp_cf = pd.concat([cf.sort_values().head(10), cf.sort_values().tail(10)])
-    print("Elastic Net picked " + str(sum(cf != 0)) + " variables and eliminated the other " +  str(sum(cf == 0)) + " variables")
-    
-    if plot:
-        # Plot out validation curve
-        plt.figure(figsize=(12, 6))
-        p_cv_elastic = pd.Series(cv_elastic, index = idx)
-        p_cv_elastic = p_cv_elastic.dropna()
-        p_cv_elastic.plot(title = "Validation - Elastic Net")
-        plt.xlabel("alpha - l1_ratio")
-        plt.ylabel("rmse")
+# Layout all coeff
+plt.figure(figsize=(8, 10))
+cf.sort_values().plot(kind = "barh", color = '#f5bc42')
+plt.title("All Coefficients in the Elastic Net Model")
 
-        # Layout all coeff
-        plt.figure(figsize=(8, 10))
-        cf.sort_values().plot(kind = "barh", color = '#f5bc42')
-        plt.title("All Coefficients in the Elastic Net Model")
-
-        # Layout 20 most important 
-        plt.figure(figsize=(8, 10))
-        imp_cf.plot(kind = "barh")
-        plt.title("20 Important Coefficients in the Elastic Net Model")
-    
-        return list(imp_cf.index)
-    else:
-        return list(imp_cf.index)
+# Layout 20 most important 
+plt.figure(figsize=(8, 10))
+imp_cf.plot(kind = "barh")
+plt.title("20 Important Coefficients in the Elastic Net Model")
+```
 
