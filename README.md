@@ -259,8 +259,8 @@ plt.title("20 Important Coefficients in the Elastic Net Model")
 ```
 | <img src="/Pics/FE1.png" alt="Alt text" title=""> |
 |:--:|
-|*Validation score of Elastic Net Regression*|
+|*Coefficients of all features*|
 
 | <img src="/Pics/FE2.png" alt="Alt text" title=""> |
 |:--:|
-|*Validation score of Elastic Net Regression*|
+|*Coefficients of top 20 features*|
