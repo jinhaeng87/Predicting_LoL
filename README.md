@@ -257,4 +257,10 @@ plt.figure(figsize=(8, 10))
 imp_cf.plot(kind = "barh")
 plt.title("20 Important Coefficients in the Elastic Net Model")
 ```
+| <img src="/Pics/FE1.png" alt="Alt text" title=""> |
+|:--:|
+|*Validation score of Elastic Net Regression*|
 
+| <img src="/Pics/FE2.png" alt="Alt text" title=""> |
+|:--:|
+|*Validation score of Elastic Net Regression*|
