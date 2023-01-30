@@ -112,7 +112,7 @@ Processing column 35 to 39
 To observe how features are correlated to one another and to the response variable, bivariate analysis was conducted. <br>
 Note for the eligibility sake, I have broken features down into size of 5.
 
-<details><summary><div style="background-color: #aec2b4">CLICK ME TO EXPAND and VIEW ALL PLOTS</div></summary>
+<details><summary><mark style="background-color: #aec2b4">CLICK ME TO EXPAND and VIEW ALL PLOTS</mark></summary>
 <p>
 | <img src="/Pics/bva1.png" alt="Alt text" title=""> |
 |:--:|
@@ -148,7 +148,7 @@ Note for the eligibility sake, I have broken features down into size of 5.
 
 </p>
 </details>
-___
+
 In addition, Pearson Correlation heatmap was also plotted to view the phenomenon from different perspective.
 See below for a correlation heatmap of all the features against the response variable. 
 
