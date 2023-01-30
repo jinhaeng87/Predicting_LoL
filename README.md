@@ -429,3 +429,5 @@ Now that we have observed 4 metrics and their confusion matrices, we can come to
 | <img src="/Pics/auc_xgb.png" alt="Alt text" title=""> |
 |:--:|
 |*AUC for XGBoost*|
+
+***We can safely conclude that Logistic Regression is the winner***
