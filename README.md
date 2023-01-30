@@ -150,7 +150,6 @@ ___
 </p>
 </details>
 ___
-
 In addition, Pearson Correlation heatmap was also plotted to view the phenomenon from different perspective.
 See below for a correlation heatmap of all the features against the response variable. 
 
