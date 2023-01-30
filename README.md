@@ -264,3 +264,111 @@ plt.title("20 Important Coefficients in the Elastic Net Model")
 | <img src="/Pics/FE2.png" alt="Alt text" title=""> |
 |:--:|
 |*Coefficients of top 20 features*|
+
+At the end of feature engineering, the cleaned version of dataframe was exported.
+
+
+## Model Training
+Among various classification techniques out there, I have decided to go with the ones that are universally considered to be robust. <br>
+1. Logistic Regression
+2. Random Forest Classifier
+3. XGBoost Classifier
+
+For each method, grid searching was performed similarly to that of Elastic Net, to find the best performing parameters. 
+As building classification model with grid searching can be computationally heavy and with data being static in this case, training multiple times won't be neccasary. Therefore, these models were dumped and saved as pickle files, which can be called upon and loaded for reproducibility. 
+
+```python3
+y = df['blueWins']
+X = df.drop('blueWins', axis = 1)
+scaler = MinMaxScaler()
+scaler.fit(X)
+X_sc = scaler.transform(X)
+
+# Split the dataset into train and test. By default the ratio is 70/30
+# Ratio can be hard-coded into different values
+
+X_train, X_test, y_train, y_test = train_test_split(X_sc, y, test_size=0.3, random_state=42)
+```
+
+### Logistic Regression
+```python3
+# Logistic Regression Modeling. By default, this does not save the model but an user can set save = True
+# If save is True, the model result will be saved in pickle format.
+
+def logReg(X, y, save = False):
+    lm = LogisticRegression()
+    
+    # Setup a matrix of parameters for grid search
+    param_grid = [    
+        {'penalty' : ['l1', 'l2', 'elasticnet', 'none'],
+        'C' : np.logspace(-4, 4, 20),
+        'solver' : ['lbfgs','newton-cg','liblinear','sag','saga'],
+        'max_iter' : [100, 1000, 2000]
+        }
+    ]
+    
+    # Start grid searching with 3-fold cross validation. CV can be altered into different number
+    # Due to the limitation of local machine with computation cost, cv is set to 3 by default.
+    cv_lm = GridSearchCV(lm, param_grid = param_grid, cv = 3, verbose = True, n_jobs = -1)
+    best_cvlm = cv_lm.fit(X, y)
+    print (f'Accuracy - : {best_cvlm.score(X, y):.3f}')
+    
+    if save:
+        # Save the model by dumping it into pickle
+        filename = os.path.join(wDir, 'models/logReg_model.sav')
+        pickle.dump(best_cvlm, open(filename, 'wb'))
+
+    return best_cvlm
+```
+### Random Forest Classifier
+```python3
+def rfc(X, y, save = False):
+    rfc=RandomForestClassifier(random_state=42)
+    param_grid = { 
+        'n_estimators': [200, 500],
+        'max_features': ['auto', 'sqrt', 'log2'],
+        'max_depth' : [4,5,6,7,8],
+        'criterion' :['gini', 'entropy']
+    }
+
+    CV_rfc = GridSearchCV(estimator = rfc, param_grid = param_grid, cv = 5)
+    CV_rfc.fit(X, y)
+    print (f'Accuracy - : {CV_rfc.score(X, y):.3f}')
+    
+    if save:
+        # Save the model by dumping it into pickle
+        filename = os.path.join(wDir, 'models/rfc_model.sav')
+        pickle.dump(CV_rfc, open(filename, 'wb'))
+
+    return CV_rfc
+```
+
+### XGBoost Classifier
+```python3
+def xgboost(X, y, save = False):
+    xgb = XGBClassifier(use_label_encoder = False, random_state = 42)
+    
+    param_grid = { 
+        "learning_rate": [0.0001,0.001, 0.01, 0.1, 1] ,
+        "max_depth": [3,8,15],
+        "gamma": [i/10.0 for i in range(0,5)],
+        "colsample_bytree": [i/10.0 for i in range(3,10)],
+        "reg_alpha": np.logspace(-4,2,5),
+        "reg_lambda": np.logspace(-4,2,5)}
+    scoring = ['recall']
+    
+    CV_xgb = RandomizedSearchCV(estimator = xgb, param_distributions = param_grid, n_iter = 48, 
+                                scoring = scoring, refit = 'recall', n_jobs = -1, cv = 3, verbose=0)
+    
+    CV_xgb.fit(X, y)
+    print (f'Accuracy - : {CV_xgb.score(X, y):.3f}')
+    
+    if save:
+        # Save the model by dumping it into pickle
+        filename = os.path.join(wDir, 'models/XGB_model.sav')
+        pickle.dump(CV_xgb, open(filename, 'wb'))
+
+    return CV_xgb
+```
+
+    
