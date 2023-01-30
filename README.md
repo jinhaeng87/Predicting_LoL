@@ -268,7 +268,7 @@ plt.title("20 Important Coefficients in the Elastic Net Model")
 At the end of feature engineering, the cleaned version of dataframe was exported.
 
 
-## Model Training
+## 3. Model Training
 Among various classification techniques out there, I have decided to go with the ones that are universally considered to be robust. <br>
 1. Logistic Regression
 2. Random Forest Classifier
@@ -370,5 +370,32 @@ def xgboost(X, y, save = False):
 
     return CV_xgb
 ```
+## 4. Model Performance and Validation
+For classification, it is often desired to observe 4 main metrics: accuracy, recall, precision and f1_score. 
+The following are the 4 metrics for each model displaying the performance.
+```
+______________________________________________
+Classifier: Logistic Regression
+Accuracy: 0.7290823211875843
+Precision: 0.7283702213279678
+Recall: 0.7318059299191375
+F1-score: 0.7300840336134454
+______________________________________________
 
-    
+______________________________________________
+Classifier: Random Forest Classifier
+Accuracy: 0.717948717948718
+Precision: 0.720108695652174
+Recall: 0.7142857142857143
+F1-score: 0.7171853856562923
+______________________________________________
+
+______________________________________________
+Classifier: XGBoost Classifier
+Accuracy: 0.7074898785425101
+Precision: 0.6968730057434588
+Recall: 0.7358490566037735
+F1-score: 0.7158308751229105
+______________________________________________
+
+ ```   
