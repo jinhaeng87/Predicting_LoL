@@ -372,7 +372,8 @@ def xgboost(X, y, save = False):
 ```
 ## 4. Model Performance and Validation
 For classification, it is often desired to observe 4 main metrics: accuracy, recall, precision and f1_score. 
-The following are the 4 metrics for each model displaying the performance.
+The following are the 4 metrics for each model displaying the performance. Confusion Matrices are plotted to visualize type 1 & 2 errors, demonstrating the number of True/False positives & negatives.
+
 ```
 ______________________________________________
 Classifier: Logistic Regression
@@ -399,3 +400,4 @@ F1-score: 0.7158308751229105
 ______________________________________________
 
  ```   
+ 
